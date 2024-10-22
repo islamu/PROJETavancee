@@ -1,6 +1,6 @@
 
 #include "algoXOR.h"
-
+#include <stddef.h>
 // Fonction pour chiffrer ou déchiffrer un message avec XOR
 void algoXOR(const unsigned char *message, const unsigned char *key, unsigned char *output, size_t len) {
     size_t key_len = 0;
