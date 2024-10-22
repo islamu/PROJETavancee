@@ -1,40 +1,56 @@
-# Makefile
-
 # Définition du compilateur
 CC = gcc
 
 # Options de compilation
 CFLAGS = -Wall -Wextra -std=c11 -g
 
+# Dossiers
+SRCDIR = chiffrement
+OBJDIR = build
+
 # Les fichiers sources
-SRCS = chiffrement/algoXOR.c chiffrement/tests_chiffrement.c
+SRC_XOR = $(SRCDIR)/algoXOR.c $(SRCDIR)/tests_chiffrement.c
+SRC_CBC = $(SRCDIR)/algoCBC.c $(SRCDIR)/tests_chiffrementCBC.c
 
 # Les fichiers objets correspondants
-OBJS = $(SRCS:.c=.o)
+OBJ_XOR = $(SRC_XOR:.c=.o)
+OBJ_CBC = $(SRC_CBC:.c=.o)
 
-# Le fichier exécutable final
-TARGET = chiffrement/tests_chiffrement
+# Les fichiers exécutables
+TARGET_XOR = chiffrement/tests_chiffrement
+TARGET_CBC = chiffrement/tests_chiffrementCBC
 
-# Règle par défaut (compilation complète)
-all: $(TARGET)
+# Règle par défaut pour générer les deux exécutables
+all: $(TARGET_XOR) $(TARGET_CBC)
 
-# Règle pour la création de l'exécutable final
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+# Compilation pour XOR
+$(TARGET_XOR): $(OBJ_XOR)
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Compilation pour CBC
+$(TARGET_CBC): $(OBJ_CBC)
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Règle pour compiler chaque fichier .c en fichier .o
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Règle pour exécuter les tests
-test: $(TARGET)
-	./$(TARGET)
+# Règle pour tester XOR
+test1: $(TARGET_XOR)
+	./$(TARGET_XOR)
 
-# Règle pour nettoyer les fichiers objets et l'exécutable
+# Règle pour tester CBC
+test2: $(TARGET_CBC)
+	./$(TARGET_CBC)
+
+# Règle pour nettoyer les fichiers objets et les exécutables
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJ_XOR) $(OBJ_CBC) $(TARGET_XOR) $(TARGET_CBC)
+	rm -rf $(OBJDIR)
 
 # Règle pour recompiler tout
 rebuild: clean all
 
-.PHONY: all test clean rebuild
+.PHONY: all test1 test2 clean rebuild
