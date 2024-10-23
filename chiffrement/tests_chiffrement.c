@@ -8,7 +8,7 @@
 int main() {
     // Exemple de message et de clé
     const char *message = "Les carottes sont cuites";
-    const char *key = "rutabaga";
+    const char *cle = "rutabaga";
 
     size_t len = strlen(message);
     unsigned char *encrypted = (unsigned char *)malloc(len);
@@ -20,7 +20,7 @@ int main() {
     }
 
     // Chiffrement
-    algoXOR((const unsigned char *)message, (const unsigned char *)key, encrypted, len);
+    algoXOR((const unsigned char *)message, (const unsigned char *)cle, encrypted, len);
 
     // Affichage du message chiffré en hexadécimal
     printf("Message chiffré (hex) : ");
@@ -30,7 +30,7 @@ int main() {
     printf("\n");
 
     // Déchiffrement
-    algoXOR(encrypted, (const unsigned char *)key, decrypted, len);
+    algoXOR(encrypted, (const unsigned char *)cle, decrypted, len);
     decrypted[len] = '\0'; // Ajouter le caractère nul
 
     // Affichage du message déchiffré
@@ -49,3 +49,4 @@ int main() {
 
     return EXIT_SUCCESS;
 }
+
